@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="titleTemp">Temperatura</string>
+    <string name="titleHumedad">Humedad</string>
+</resources>
