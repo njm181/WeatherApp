@@ -1,6 +1,7 @@
 package com.njm.weatherapp;
 
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,8 +14,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.njm.weatherapp.response.WeatherResponse;
 import com.njm.weatherapp.viewmodel.WeatherViewModel;
+
+import java.text.DecimalFormat;
 
 public class MainFragment extends Fragment {
 
@@ -24,6 +30,9 @@ public class MainFragment extends Fragment {
             av04D, av04N, av09D, av09N, av10D, av10N, av11D, av11N;
     private String option ="";
     private View view;
+    private double tempCelsius=0;
+    private FusedLocationProviderClient fusedLocationClient;
+
 
     public MainFragment() {
     }
@@ -31,10 +40,19 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
 
-        }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
+        fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            location.getLatitude();
+                            location.getLongitude();
+                        }
+                    }
+                });
 
     }
 
@@ -57,9 +75,11 @@ public class MainFragment extends Fragment {
         weatherViewModel.getCurrentWeather().observe(this, new Observer<WeatherResponse>() {
             @Override
             public void onChanged(WeatherResponse weatherResponse) {
+                tempCelsius = weatherResponse.getMain().getTemp() - 273.15;
+                DecimalFormat format = new DecimalFormat("#.0");
                 tvCityName.setText(weatherResponse.getName());
-                tvTemperatura.setText(String.valueOf(weatherResponse.getMain().getTemp()));
-                tvHumedad.setText(String.valueOf(weatherResponse.getMain().getHumidity()));
+                tvTemperatura.setText(format.format(tempCelsius)+"°");
+                tvHumedad.setText(String.valueOf(weatherResponse.getMain().getHumidity())+"%");
                 tvDescription.setText((weatherResponse.getWeather().get(0).getDescription()));
 
                 option = weatherResponse.getWeather().get(0).getIcon();
