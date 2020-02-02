@@ -6,12 +6,14 @@ import com.njm.weatherapp.response.WeatherResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface WeatherService {
 
-    @GET("weather"+ Constants.ID_CITY)
-    Call<WeatherResponse> loadWeather();
+    @GET("weather?")//lat={latitude}&lon={longitude}
+    Call<WeatherResponse> loadWeather(@Query("lat")double latitude, @Query("lon")double longitude);
 
-    @GET("forecast"+ Constants.ID_CITY)
-    Call<WeatherExtendedResponse> loadExtendedForecast();
+    @GET("forecast?")
+    Call<WeatherExtendedResponse> loadExtendedForecast(@Query("lat")double latitude, @Query("lon")double longitude);
 }

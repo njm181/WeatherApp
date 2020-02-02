@@ -19,10 +19,11 @@ public class WeatherViewModel extends AndroidViewModel {
     public WeatherViewModel(@NonNull Application application) {
         super(application);
         weatherRepository = new WeatherRepository();
-        currentWeather = weatherRepository.getCurrentWeather();
+
     }
 
-    public LiveData<WeatherResponse> getCurrentWeather(){
+    public LiveData<WeatherResponse> getCurrentWeather(double latitude, double longitude){
+        currentWeather = weatherRepository.getCurrentWeather(latitude, longitude);
         return currentWeather;
     }
 }

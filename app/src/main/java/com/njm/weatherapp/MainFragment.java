@@ -4,6 +4,7 @@ package com.njm.weatherapp;
 import android.location.Location;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -21,6 +23,8 @@ import com.njm.weatherapp.response.WeatherResponse;
 import com.njm.weatherapp.viewmodel.WeatherViewModel;
 
 import java.text.DecimalFormat;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainFragment extends Fragment {
 
@@ -32,6 +36,10 @@ public class MainFragment extends Fragment {
     private View view;
     private double tempCelsius=0;
     private FusedLocationProviderClient fusedLocationClient;
+    private FusedLocationProviderClient client;
+    private double longitude;
+    private double latitude;
+
 
 
     public MainFragment() {
@@ -41,18 +49,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
-        fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            location.getLatitude();
-                            location.getLongitude();
-                        }
-                    }
-                });
+        requestPermission();
 
     }
 
@@ -64,22 +61,45 @@ public class MainFragment extends Fragment {
 
         loadViews();
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-        loadCurrentWeather();
+        getCoordinates();
+
 
         return view;
     }
 
-    public void loadCurrentWeather() {
+    private void requestPermission(){
+        ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_FINE_LOCATION},1);
+    }
+    private void getCoordinates(){
+        client = LocationServices.getFusedLocationProviderClient(getActivity());
+        client.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                if(location!=null){
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    loadCurrentWeather(latitude, longitude);
+                }
+
+            }
+        });
+    }
+
+
+    public void loadCurrentWeather(double lat, double longi) {
+        Toast.makeText(getActivity(), "CORDENADAS ----->"+lat+" ---"+longi, Toast.LENGTH_LONG).show();
+
         hideViews();
 
-        weatherViewModel.getCurrentWeather().observe(this, new Observer<WeatherResponse>() {
+        weatherViewModel.getCurrentWeather(lat, longi).observe(this, new Observer<WeatherResponse>() {
             @Override
             public void onChanged(WeatherResponse weatherResponse) {
                 tempCelsius = weatherResponse.getMain().getTemp() - 273.15;
                 DecimalFormat format = new DecimalFormat("#.0");
                 tvCityName.setText(weatherResponse.getName());
                 tvTemperatura.setText(format.format(tempCelsius)+"°");
-                tvHumedad.setText(String.valueOf(weatherResponse.getMain().getHumidity())+"%");
+                tvHumedad.setText(weatherResponse.getMain().getHumidity()+"%");
                 tvDescription.setText((weatherResponse.getWeather().get(0).getDescription()));
 
                 option = weatherResponse.getWeather().get(0).getIcon();

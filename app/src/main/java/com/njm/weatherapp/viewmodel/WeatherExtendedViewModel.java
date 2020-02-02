@@ -19,10 +19,10 @@ public class WeatherExtendedViewModel extends AndroidViewModel {
     public WeatherExtendedViewModel(@NonNull Application application) {
         super(application);
         weatherExtendedRepository = new WeatherExtendedRepository();
-        extendedForecastList = weatherExtendedRepository.getExtendedForecast();
     }
 
-    public LiveData<WeatherExtendedResponse> getExtendedForecastList(){
+    public LiveData<WeatherExtendedResponse> getExtendedForecastList(double latitute, double longitude){
+        extendedForecastList = weatherExtendedRepository.getExtendedForecast(latitute, longitude);
         return extendedForecastList;
     }
 }

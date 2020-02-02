@@ -39,12 +39,12 @@ public class WeatherRepository {
         weatherService = retrofit.create(WeatherService.class);
     }
 
-    public MutableLiveData<WeatherResponse> getCurrentWeather(){
+    public MutableLiveData<WeatherResponse> getCurrentWeather(double latitude, double longitude){
         if(weatherResponse == null){
             weatherResponse = new MutableLiveData<>();
         }
 
-        Call<WeatherResponse> call = weatherService.loadWeather();
+        Call<WeatherResponse> call = weatherService.loadWeather(latitude, longitude);
         call.enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {

@@ -1,6 +1,7 @@
 package com.njm.weatherapp;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.njm.weatherapp.model.ExtendedForecast;
 import com.njm.weatherapp.model.Weather;
 import com.njm.weatherapp.response.WeatherExtendedResponse;
@@ -30,6 +34,9 @@ public class ItemFragment extends Fragment {
     private ExtendedForecast extendedForecast;
     private List<Weather> weatherList;
     private String icon ="";
+    private FusedLocationProviderClient client;
+    private double longitude;
+    private double latitude;
 
 
 
@@ -60,17 +67,34 @@ public class ItemFragment extends Fragment {
 
             adapter = new ItemRecyclerViewAdapter(extendedForecastList, getActivity());
             recyclerView.setAdapter(adapter);
-            loadExtendedForecast();
+            getCoordinates();
+
         }
         return view;
     }
 
-    private void loadExtendedForecast(){
+    private void getCoordinates(){
+        client = LocationServices.getFusedLocationProviderClient(getActivity());
+        client.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                if(location!=null){
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    loadExtendedForecast(latitude, longitude);
+                }
+
+            }
+        });
+    }
+
+    private void loadExtendedForecast(double lat, double longi){
         extendedForecastList = new ArrayList<>();
-        weatherExtendedViewModel.getExtendedForecastList().observe(getActivity(), new Observer<WeatherExtendedResponse>() {
-        String fecha = "";
-        String hora = "";
-        String descripcion="";
+        weatherExtendedViewModel.getExtendedForecastList(lat, longi).observe(getActivity(), new Observer<WeatherExtendedResponse>() {
+            String fecha = "";
+            String hora = "";
+            String descripcion="";
             @Override
             public void onChanged(WeatherExtendedResponse weatherExtendedResponse) {
                 for (com.njm.weatherapp.model.List item: weatherExtendedResponse.getList()) {//recorro dentro de List cada elemento que tiene (5 de dias previstos)
