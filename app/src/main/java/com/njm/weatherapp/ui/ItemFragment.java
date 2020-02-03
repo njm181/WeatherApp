@@ -1,4 +1,4 @@
-package com.njm.weatherapp;
+package com.njm.weatherapp.ui;
 
 import android.content.Context;
 import android.location.Location;
@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.njm.weatherapp.R;
 import com.njm.weatherapp.model.ExtendedForecast;
 import com.njm.weatherapp.model.Weather;
 import com.njm.weatherapp.response.WeatherExtendedResponse;

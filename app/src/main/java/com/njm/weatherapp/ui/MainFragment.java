@@ -1,4 +1,4 @@
-package com.njm.weatherapp;
+package com.njm.weatherapp.ui;
 
 
 import android.location.Location;
@@ -19,6 +19,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.njm.weatherapp.R;
 import com.njm.weatherapp.response.WeatherResponse;
 import com.njm.weatherapp.viewmodel.WeatherViewModel;
 
@@ -80,6 +81,7 @@ public class MainFragment extends Fragment {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
                     loadCurrentWeather(latitude, longitude);
+
                 }
 
             }
@@ -88,7 +90,7 @@ public class MainFragment extends Fragment {
 
 
     public void loadCurrentWeather(double lat, double longi) {
-        Toast.makeText(getActivity(), "CORDENADAS ----->"+lat+" ---"+longi, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), "CORDENADAS ----->"+lat+" ---"+longi, Toast.LENGTH_LONG).show();
 
         hideViews();
 
@@ -99,7 +101,7 @@ public class MainFragment extends Fragment {
                 DecimalFormat format = new DecimalFormat("#.0");
                 tvCityName.setText(weatherResponse.getName());
                 tvTemperatura.setText(format.format(tempCelsius)+"°");
-                tvHumedad.setText(weatherResponse.getMain().getHumidity()+"%");
+                tvHumedad.setText("Humedad "+weatherResponse.getMain().getHumidity()+"%");
                 tvDescription.setText((weatherResponse.getWeather().get(0).getDescription()));
 
                 option = weatherResponse.getWeather().get(0).getIcon();
@@ -173,8 +175,6 @@ public class MainFragment extends Fragment {
         av10N = view.findViewById(R.id.animation_view_10n);
         av11D = view.findViewById(R.id.animation_view_11d);
         av11N = view.findViewById(R.id.animation_view_11n);
-        tvTitleTemp = view.findViewById(R.id.textViewTitleTemp);
-        tvTitleHum = view.findViewById(R.id.textViewTitleHum);
     }
 
     public void hideViews(){

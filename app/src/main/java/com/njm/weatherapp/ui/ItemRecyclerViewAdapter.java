@@ -1,4 +1,4 @@
-package com.njm.weatherapp;
+package com.njm.weatherapp.ui;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.njm.weatherapp.R;
 import com.njm.weatherapp.model.ExtendedForecast;
 
 import java.text.DecimalFormat;
@@ -92,7 +93,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         }
 
         holder.txtTemperatura.setText(format.format(tempCelsius)+"°");
-        holder.txtDescripcion.setText(holder.extendedForecast.getDescripcion());
+       //holder.txtDescripcion.setText(holder.extendedForecast.getDescripcion());
         holder.txtFecha.setText(holder.extendedForecast.getFecha());
         holder.txtHora.setText(hora);
 
@@ -117,7 +118,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView txtFecha;
-        public final TextView txtDescripcion;
+        //public final TextView txtDescripcion;
         public final TextView txtTemperatura;
         public final TextView txtHora;
         public ExtendedForecast extendedForecast;
@@ -129,7 +130,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             super(view);
             mView = view;
             txtFecha = view.findViewById(R.id.textViewFecha);
-            txtDescripcion = view.findViewById(R.id.textViewDescripcion);
+            //txtDescripcion = view.findViewById(R.id.textViewDescripcion);
             txtTemperatura = view.findViewById(R.id.textViewTemp);
             txtHora = view.findViewById(R.id.textViewHora);
             av01D = view.findViewById(R.id.animation_view_01d);

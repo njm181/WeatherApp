@@ -4,22 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="#eceff1"
     tools:context=".MainActivity">
 
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animation_view_background"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="fondo_animado.json"
-        app:lottie_loop="true" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineMain"
@@ -27,13 +14,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="visible"
-        app:layout_constraintGuide_percent="0.6"
+        app:layout_constraintGuide_percent="0.5"
         tools:visibility="visible" />
 
 
     <fragment
         android:id="@+id/fragmentTop"
-        android:name="com.njm.weatherapp.MainFragment"
+        android:name="com.njm.weatherapp.ui.MainFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineMain"
@@ -43,7 +30,7 @@
 
     <fragment
         android:id="@+id/fragmentBot"
-        android:name="com.njm.weatherapp.ItemFragment"
+        android:name="com.njm.weatherapp.ui.ItemFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
